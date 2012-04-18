@@ -44,65 +44,67 @@ cnt := cnt + 1.
 |currentTokens dVal didJump aVal bVal tVal|
 didJump:=0.
 
-[(codeArray at:progCount) = 'END'] whileFalse: [
+[(codeArray at:progCount) = 'end'] whileFalse: [
 currentTokens:= ((codeArray at:progCount) subStrings: Character space).
-(currentTokens at:1) = 'READ'  ifTrue: [
-Transcript show: '#>'.
+(currentTokens at:1) = 'read'  ifTrue: [
+Transcript show: 'read>'.
 rtStack push: (stdin nextLine).
 ].
 
-(currentTokens at:1) = 'PRINT' ifTrue: [
+(currentTokens at:1) = 'print' ifTrue: [
 (rtStack pop) printNl.
 ].
 
-(currentTokens at:1) = 'PUSH' ifTrue: [
+(currentTokens at:1) = 'push' ifTrue: [
 dVal:=rtDict at: (currentTokens at:2) ifAbsent: [dVal:=(currentTokens at:2).].
 rtStack push: (dVal asNumber).
 ].
 
-(currentTokens at:1) = 'STOR' ifTrue: [
+(currentTokens at:1) = 'store' ifTrue: [
 rtDict at: (currentTokens at:2) put: rtStack pop.
 ].
 
-(currentTokens at:1) = 'JMP' ifTrue: [
+(currentTokens at:1) = 'testtgoto' ifTrue: [
+tVal:=(rtStack pop).
+(tVal ~= 0.0) ifTrue: [
 progCount:=(currentTokens at:2) asNumber.
-didJump:=didJump+1.
+didJump:=didJump+1.].
 ].
 
-(currentTokens at:1) = 'JIF' ifTrue: [
+(currentTokens at:1) = 'testfgoto' ifTrue: [
 tVal:=(rtStack pop).
 (tVal = 0.0) ifTrue: [
 progCount:=(currentTokens at:2) asNumber.
 didJump:=didJump+1.].
 ].
 
-(currentTokens at:1) = 'ADD' ifTrue: [
+(currentTokens at:1) = 'plus' ifTrue: [
 bVal:=(rtStack pop).
 aVal:=(rtStack pop).
 tVal:=(aVal + bVal).
 rtStack push: tVal.
 ].
 
-(currentTokens at:1) = 'MUL' ifTrue: [
+(currentTokens at:1) = 'multiply' ifTrue: [
 bVal:=(rtStack pop).
 aVal:=(rtStack pop).
 tVal:= (aVal * bVal).
 rtStack push: tVal.
 ].
-(currentTokens at:1) = 'SUB' ifTrue: [
+(currentTokens at:1) = 'minus' ifTrue: [
 bVal:=(rtStack pop).
 aVal:=(rtStack pop).
 tVal:= (aVal - bVal).
 rtStack push: tVal.
 ].
-(currentTokens at:1) = 'DIV' ifTrue: [
+(currentTokens at:1) = 'divide' ifTrue: [
 bVal:=(rtStack pop).
 aVal:=(rtStack pop).
 tVal:= (aVal / bVal).
 rtStack push: tVal.
 ].
 
-(currentTokens at:1) = 'TGT' ifTrue: [
+(currentTokens at:1) = 'greater' ifTrue: [
 bVal:=(rtStack pop).
 aVal:=(rtStack pop).
 (aVal > bVal) ifTrue: [
@@ -110,7 +112,7 @@ rtStack push: 1.0.] ifFalse: [
 rtStack push: 0.0.].
 ].
 
-(currentTokens at:1) = 'TLT' ifTrue: [
+(currentTokens at:1) = 'less' ifTrue: [
 bVal:=(rtStack pop).
 aVal:=(rtStack pop).
 (aVal < bVal) ifTrue: [
@@ -118,7 +120,7 @@ rtStack push: 1.0.] ifFalse: [
 rtStack push: 0.0.].
 ].
 
-(currentTokens at:1) = 'TEQ' ifTrue: [
+(currentTokens at:1) = 'equal' ifTrue: [
 bVal:=(rtStack pop).
 aVal:=(rtStack pop).
 (aVal = bVal) ifTrue: [
@@ -126,7 +128,6 @@ rtStack push: 1.0.] ifFalse: [
 rtStack push: 0.0.].
 ].
 
-Transcript show: ' '; cr.
 (didJump > 0) ifFalse: [progCount:= progCount + 1.].
 didJump:=0.
 ].
