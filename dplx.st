@@ -28,12 +28,11 @@ Transcript show: ' '; cr.
 
 
 "====BEGIN read instructions into codeArray===="
-|aFile aLine aToken aSet cnt|
+|aFile aLine aSet cnt|
 cnt:=1.
 aFile := (FileStream open: fileName mode: FileStream read).
 [aFile atEnd ] whileFalse: [
 aLine:= aFile upTo: Character lf.
-aToken:= aLine copyUpTo: Character space.
 codeArray at: cnt put: (aLine).
 cnt := cnt + 1.
 ].
